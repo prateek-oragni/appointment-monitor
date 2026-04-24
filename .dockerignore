@@ -1,0 +1,7 @@
+.venv/
+.claude/
+screenshots/
+status_log.jsonl
+__pycache__/
+*.pyc
+docs/
