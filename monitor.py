@@ -7,6 +7,7 @@ or offline, and logs results with timestamps.
 
 import argparse
 import json
+import os
 import sys
 import time
 from datetime import datetime, timezone
@@ -17,7 +18,8 @@ from PIL import Image, ImageDraw, ImageFont
 from playwright.sync_api import sync_playwright, TimeoutError as PwTimeout
 
 URL = "https://booking.uk.hsone.app/soe/new/Gentle%20Dental%20UK%20Ltd?pid=UKGDC01"
-LOG_FILE = Path(__file__).parent / "status_log.jsonl"
+DATA_DIR = Path(os.environ.get("DATA_DIR", str(Path(__file__).parent)))
+LOG_FILE = DATA_DIR / "status_log.jsonl"
 
 ONLINE_MARKERS = [
     "Have you booked an appointment with us before",
@@ -99,7 +101,7 @@ def check_page(headless: bool = True, timeout_ms: int = 30000) -> dict:
 
             uk_now = datetime.now(ZoneInfo("Europe/London"))
             ts_str = uk_now.strftime("%Y%m%d_%H%M%S")
-            screenshots_dir = Path(__file__).parent / "screenshots"
+            screenshots_dir = DATA_DIR / "screenshots"
             screenshots_dir.mkdir(exist_ok=True)
             ss_path = screenshots_dir / f"screenshot_{ts_str}.png"
             page.screenshot(path=str(ss_path))
